@@ -1,0 +1,43 @@
+GET http://localhost:3000/users HTTP/1.1
+
+###
+
+POST http://localhost:3000/users HTTP/1.1
+content-type: application/json
+
+{ 
+    "id": "2",
+    "login": "login alex",
+    "email": "alex@gmail.com",
+    "full_name": "alex",
+    "sex": "1",
+    "password": "31232321321",
+    "date_birth": "20.04.2020",
+    "date_create": "20.04.2020",
+    "date_modify": "20.04.2020",
+    "date_hire": "20.04.2020"
+}
+
+###
+
+
+PUT http://localhost:3000/users/1 HTTP/1.1
+content-type: application/json
+
+{     
+    "id": "1",
+    "login": "login alex",
+    "email": "alex@gmail.com",
+    "full_name": "alex",
+    "sex": "1",
+    "password": "1111111",
+    "date_birth": "20.04.2020",
+    "date_create": "20.04.2020",
+    "date_modify": "20.04.2020",
+    "date_hire": "20.04.2020"
+}
+
+###
+GET http://localhost:3000/users/1 HTTP/1.1
+
+###
