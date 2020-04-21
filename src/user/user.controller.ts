@@ -1,48 +1,43 @@
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UserUpdateValidationPipe } from './pipes/user-validation.pipe';
-import { GetUserFilterDto } from './dto/get-user-filter.dto';
+import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
-import { User } from './user.model';
 import { UserService } from './user.service';
-import { Controller, Get, Post, Body, Param, Delete, Query, UsePipes, ValidationPipe, Put, Patch } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Delete, Query, UsePipes, ValidationPipe, Put, Patch, ParseIntPipe } from '@nestjs/common';
 
 @Controller('users')
 export class UserController {
     constructor(
-        private userService: UserService
+        private userService: UserService,
     ) { }
 
-    @Get()
-    getAllUsers(@Query() filterDto: GetUserFilterDto): User[] {
-        if (Object.keys(filterDto).length) {
-            return this.userService.getUserWithFilter(filterDto);
+    // @Get()
+    // getAllUsers(@Query() filterDto: GetUserFilterDto): User[] {
+    //     if (Object.keys(filterDto).length) {
+    //         return this.userService.getUserWithFilter(filterDto);
 
-        } else return this.userService.getUsers();
-    }
+    //     } else return this.userService.getUsers();
+    // }
 
     @Get('/:id')
-    GetUserbyId(@Param('id') id: string): User {
+    GetUserbyId(@Param('id', ParseIntPipe) id: number): Promise<User> {
         return this.userService.getUserById(id);
     }
 
     @Post()
     @UsePipes(ValidationPipe)
-    createUser(@Body() createUserDto: CreateUserDto) {
+    createUser(@Body() createUserDto: CreateUserDto): Promise<User> {
         console.log(createUserDto);
-        
         return this.userService.createUser(createUserDto);
     }
 
-    @Patch('/:id')
-    updateUser(
-        @Param('id') id: string,
-        @Body(UserUpdateValidationPipe) updateUserDto: UpdateUserDto,
-        ): User {
-            return this.updateUser(id, updateUserDto);
-    }
+    @Put(':id')
+	async updateItem(@Body() updateUserDto: UpdateUserDto) {
+        return JSON.stringify(updateUserDto);
+        // return this.userService.updateUser(updateUserDto);
+	}
 
-    @Delete('/:id')
-    deleteUser(@Param('id') id: string) {
-        this.userService.deleteUser(id);
-    }
+    // @Delete('/:id')
+    // async deleteUser(@Param('id') id: string) {
+    //     return  this.userService.deleteUser(id);
+    // }
 }

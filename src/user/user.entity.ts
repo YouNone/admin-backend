@@ -1,8 +1,11 @@
+import { IUser } from './../share/type';
 import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn } from "typeorm";
 import { ESex } from "src/share/type";
+import { Optional } from "@nestjs/common";
+import { IsEmail } from "class-validator";
 
 @Entity()
-export class User extends BaseEntity {
+export class User implements IUser {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -23,17 +26,17 @@ export class User extends BaseEntity {
     password: string;
     
     @Column()
-    date_birth: string;
+    date_birth: Date;
     
     @CreateDateColumn()
-    date_create: string;
+    date_create: Date;
     
     @UpdateDateColumn()
-    date_modify: string;
+    date_modify: Date;
     
     @Column()
-    date_hire: string;
+    date_hire: Date;
     
-    @Column()
-	date_fire?: string;
+	@Column({nullable: true})
+	date_fire?: Date;
 }

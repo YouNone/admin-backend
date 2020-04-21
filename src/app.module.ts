@@ -1,5 +1,6 @@
+import { User } from './user/user.entity';
+import { TaskModule } from './task/task.module';
 import { TypeOrmconfig } from './config/typeorm.config';
-import { UserModule } from './user/user.module';
 import { TaskService } from './task/task.service';
 import { UserService } from './user/user.service';
 import { UserController } from './user/user.controller';
@@ -12,13 +13,18 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 @Module({
   imports: [
       TypeOrmModule.forRoot(TypeOrmconfig),
-      UserModule
+      TypeOrmModule.forFeature([User]),
+      TaskModule
       ],
   controllers: [
         UserController, 
-        TaskController, AppController],
+        TaskController, 
+        AppController
+      ],
   providers: [
         TaskService, 
-        UserService, AppService],
+        UserService, 
+        AppService
+      ],
 })
 export class AppModule {}

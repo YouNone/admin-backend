@@ -1,7 +1,9 @@
-import { CreateUserDto } from './create-user.dto';
-import { IsNotEmpty, IsOptional } from "class-validator";
-import { ESex } from "src/share/type";
+import { IsInt, Min, } from "class-validator";
+import { CreateUserDto } from "./create-user.dto";
 
-export class UpdateUserDto extends CreateUserDto {
+export class UpdateUserDto extends CreateUserDto{
 
+    @IsInt()
+    @Min(0)
+    id: number;
 }
