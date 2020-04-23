@@ -46,3 +46,10 @@ export interface IGroup {
 	// boss?: IUserWithPosition[]
 }
 
+export interface IDivision {
+	id?: number;
+	parent_id: number | null;
+	name: string;
+
+}
+
