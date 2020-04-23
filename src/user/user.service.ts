@@ -1,3 +1,4 @@
+import { GetUserFilterDto } from './dto/get-user-filter.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -11,26 +12,39 @@ export class UserService {
         @InjectRepository(User) private userRepository: Repository<User>
     ) { }
 
-    // getUserWithFilter(filterDto: GetUserFilterDto): User[] {
-    //     const { search, full_name } = filterDto
+    async getUsersList(filterDto: GetUserFilterDto): Promise<User[]> {
+        const { search, full_name, sort_by } = filterDto;
+        const query = this.userRepository.createQueryBuilder('user');
 
-    //     let users = this.getUsers();
-    //     if (full_name) {
-    //         users = users.filter(user => user.full_name === full_name);
-    //     }
-    //     if (search) {
-    //         users = users.filter(user => user.login.includes(search));
-    //     }
-    //     return users;
-    // }
 
-    async getUsersList() {
-        // return this.userRepository
+        if (sort_by) {
+            query.orderBy(sort_by, "DESC");
+        }
+
+        if (filterDto.full_name) {
+            query.andWhere('user.full_name = :full_name', { full_name })
+        }
+
+        if (filterDto.search) {
+            query.andWhere(
+                `(
+                user.login LIKE :search 
+                OR user.email LIKE :search
+                OR user.date_birth LIKE :search
+                OR user.date_create LIKE :search
+                OR user.date_modify LIKE :search
+                OR user.date_hire LIKE :search
+                )`,
+                { search: `%${search}%` }
+            )
+        }
+
+        const users = query.getMany();
+        return users;
     }
 
     async getUserById(id: number): Promise<User> {
         const found = this.userRepository.findOne(id);
-
         if (!found) {
             throw new NotFoundException(`User with id ${id} not found`);
         }
@@ -41,12 +55,28 @@ export class UserService {
         return await this.userRepository.save(createUserDto);
     }
 
-    async updateUser(updateUserDto: UpdateUserDto): Promise<User> {
+    async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
+        // const found = await this.getUserById(id);
+        // // console.log('found', found);
+        // // console.log('updateUserDto', updateUserDto);
+        // return await this.userRepository.update(id, {updateUserDto});
+        updateUserDto.id = id;
         return await this.userRepository.save(updateUserDto);
+
     }
 
-    // deleteUser(id: string): void {
-    //     const found = this.getUserById(id);
-    //     this.users = this.users.filter(user => user.id !== found.id);
-    // }
+    async  deleteUser(id: number): Promise<void> {
+        const result = await this.userRepository.delete(id);
+        if (result.affected === 0) {
+            throw new NotFoundException(`User with id "${id}" is not  found`);
+        }
+
+        // const found = await this.getUserById(id);
+        // if (!found) {
+        //     throw new NotFoundException(`User with id ${id} not found`);
+        // }
+        // const delUser = await this.userRepository.delete(id);
+        // // if(delUser.affected === 0) throw new NotFoundException(` 2 User with id ${id} not found`);
+        // return found;
+    }
 }

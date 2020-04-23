@@ -1,8 +1,12 @@
-import { IsOptional } from "class-validator";
+import { IsOptional, IsNotEmpty } from "class-validator";
+import { CreateUserDto } from "./create-user.dto";
 
-export class GetUserFilterDto {
+export class GetUserFilterDto extends CreateUserDto {
     @IsOptional()
+    @IsNotEmpty()
     search: string;
+
     @IsOptional()
-    full_name: string;
+    @IsNotEmpty()
+    sort_by: string;
 }

@@ -1,3 +1,4 @@
+import { GetUserFilterDto } from './dto/get-user-filter.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -10,15 +11,12 @@ export class UserController {
         private userService: UserService,
     ) { }
 
-    // @Get()
-    // getAllUsers(@Query() filterDto: GetUserFilterDto): User[] {
-    //     if (Object.keys(filterDto).length) {
-    //         return this.userService.getUserWithFilter(filterDto);
+    @Get()
+    getAllUsers(@Query() filterDto: GetUserFilterDto) {
+       return this.userService.getUsersList(filterDto);
+    }
 
-    //     } else return this.userService.getUsers();
-    // }
-
-    @Get('/:id')
+    @Get(':id')
     GetUserbyId(@Param('id', ParseIntPipe) id: number): Promise<User> {
         return this.userService.getUserById(id);
     }
@@ -31,13 +29,16 @@ export class UserController {
     }
 
     @Put(':id')
-	async updateItem(@Body() updateUserDto: UpdateUserDto) {
-        return JSON.stringify(updateUserDto);
-        // return this.userService.updateUser(updateUserDto);
+	async updateItem(
+        @Param('id', ParseIntPipe) id: number,
+        @Body() updateUserDto: UpdateUserDto
+        ) {
+        // return JSON.stringify(updateUserDto);
+        return this.userService.updateUser(id, updateUserDto);
 	}
 
-    // @Delete('/:id')
-    // async deleteUser(@Param('id') id: string) {
-    //     return  this.userService.deleteUser(id);
-    // }
+    @Delete(':id')
+    async deleteUser(@Param('id', ParseIntPipe) id: number) {
+        return  this.userService.deleteUser(id);
+    }
 }

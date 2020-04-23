@@ -6,13 +6,14 @@ POST http://localhost:3000/users HTTP/1.1
 content-type: application/json
 
 { 
-    "full_name": "Test seq 2",
-    "password": "233433433434343",
-    "login": "login for Test",
-    "email": "Test@gmail.com",
+    "group_id": 2,
+    "full_name": "Username for user",
+    "password": "4314333213332423",
+    "login": "loginion",
+    "email": "useritto@gmail.com",
     "sex": "2",
-    "date_birth": "1988-08-01 00:00:00.000",
-    "date_hire": "2014-08-01 00:00:00.000"
+    "date_birth": "2000-08-01 00:00:00.000",
+    "date_hire": "2018-08-01 00:00:00.000"
 }
 
 ###
@@ -22,15 +23,42 @@ PUT http://localhost:3000/users/1 HTTP/1.1
 content-type: application/json
 
 {     
-    "login": "login alex",
+    "login": "LOGIN ALEX",
     "email": "alex@gmail.com",
-    "full_name": "alex",
+    "full_name": "ALEX",
     "sex": "1",
     "password": "1111111",
-
+    "date_birth": "1988-07-31T20:00:00.000Z",
+    "date_create": "2020-04-21T16:27:32.936Z",
+    "date_modify": "2020-04-21T16:27:32.936Z",
+    "date_hire": "2014-07-31T21:00:00.000Z",
+    "date_fire": null
 }
 
 ###
 GET http://localhost:3000/users/1 HTTP/1.1
 
 ###
+
+POST http://localhost:3000/groups HTTP/1.1
+content-type: application/json
+
+{ 
+    "name": "group3 test 3",
+    "code": "33332123"
+}
+
+###
+
+PUT http://localhost:3000/groups/2 HTTP/1.1
+content-type: application/json
+
+{ 
+    "code": "12222222"
+}
+
+###
+
+DELETE http://localhost:3000/groups/3 HTTP/1.1
+content-type: application/json
+

@@ -14,16 +14,35 @@ export enum ETaskTypeStart {
 }
 
 export interface IUser {
-	id: number;
+	id?: number;
 	login: string;
 	email: string;
 	full_name: string;
 	sex: ESex;
 	password: string;
+	group_id: number
 	date_birth: Date;
 	date_create: Date;
 	date_modify: Date;
 	date_hire: Date;
 	date_fire?: Date;
+}
+
+export interface IGroup {
+	/** ID группы */
+	id?: number;
+	/** Имя группы */
+	name: string;
+	/** Код группы */
+	code?: string;
+	/** дата создания группы */
+	date_create?: Date;
+	date_modify?: Date;
+	/** Количество пользователей группы */
+	count?: number;
+	/** Члены группы */
+	// user?: IUserWithPosition[]
+	/** Руководители группы */
+	// boss?: IUserWithPosition[]
 }
 

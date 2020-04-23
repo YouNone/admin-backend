@@ -1,23 +1,22 @@
 import { IUser } from './../share/type';
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, UpdateDateColumn, CreateDateColumn, ManyToOne } from "typeorm";
 import { ESex } from "src/share/type";
-import { Optional } from "@nestjs/common";
-import { IsEmail } from "class-validator";
+import { Group } from 'src/group/group.entity';
 
 @Entity()
 export class User implements IUser {
 
     @PrimaryGeneratedColumn()
     id: number;
+    
+    @Column()
+    full_name: string;
 
     @Column()
     login: string;
 
     @Column()
     email: string;
-    
-    @Column()
-    full_name: string;
 
     @Column()
     sex: ESex;
@@ -25,6 +24,9 @@ export class User implements IUser {
     @Column()
     password: string;
     
+    @Column()
+    group_id: number
+
     @Column()
     date_birth: Date;
     
@@ -38,5 +40,8 @@ export class User implements IUser {
     date_hire: Date;
     
 	@Column({nullable: true})
-	date_fire?: Date;
+    date_fire?: Date;
+    
+    @ManyToOne(type => Group, group => group.users)
+    group: Group;
 }
