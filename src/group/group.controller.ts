@@ -1,9 +1,10 @@
+import { alowedFields } from './../share/type';
+import { ParseQuery } from './../share/parse.query';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { GroupService } from './group.service';
 import { Controller, Query, Get, UsePipes, ValidationPipe, Put, Delete, ParseIntPipe, Body, Param, Post } from '@nestjs/common';
 import { Group } from './group.entity';
-import { GroupQueryDto } from './dto/group-query.dto';
 
 @Controller('groups')
 export class GroupController {
@@ -12,8 +13,10 @@ export class GroupController {
     ) { }
 
     @Get()
-    getAllGroups(@Query() filterDto: GroupQueryDto) {
-       return this.groupService.getGroupsList(filterDto);
+    getAllGroups(@Query() queryParser) {
+        const searcParams = new ParseQuery(queryParser, alowedFields);
+        // console.log(searcParams); 
+       return this.groupService.getGroupsList(searcParams);
     }
 
     @Get(':id')
@@ -24,7 +27,7 @@ export class GroupController {
     @Post()
     @UsePipes(ValidationPipe)
     createGroup(@Body() createGroupDto: CreateGroupDto): Promise<Group> {
-        console.log(createGroupDto);
+        // console.log(createGroupDto);
         return this.groupService.createGroup(createGroupDto);
     }
 

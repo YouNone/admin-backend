@@ -3,36 +3,42 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateDivisionDto } from './dto/create.division.dto';
 import { Division } from './division.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, TreeRepository, getManager } from 'typeorm';
 import { UpdateDivisionDto } from './dto/update.division.dto';
 import { DivisionFilterDto } from './dto/division.filter.dto';
 
 @Injectable()
+
 export class DivisionService {
     constructor(
-        @InjectRepository(Division) private divisionRepository: Repository<Division>
+        @InjectRepository(Division) 
+        private divisionRepository: Repository<Division>,
+        // @InjectRepository(Division) 
+        // private treeRepositiry: TreeRepository<Division>
+
     ) { }
 
     async getDivisionsList(filterDto: DivisionFilterDto): Promise<Division[]> {
         const { search, name } = filterDto;
-        const query = this.divisionRepository.createQueryBuilder('Division');
+        const query = this.divisionRepository.createQueryBuilder('division');
+
+        // if (filterDto.search) {
+        //     query.andWhere('division.name = :name', {name: `%${name}%`});
+        // }
 
         if (filterDto.name) {
-            query.andWhere('division.name = :name', { name });
+            query.andWhere('division.name = :name',  {name: `%${name}%`})
         }
-
-        if (filterDto.search) {
-            query.andWhere(
-                `(
-                OR division.date_create LIKE :search
-                OR division.date_modify LIKE :search
-                )`,
-                { search: `%${search}%` }
-            );
-        }
-
         const divisions = query.getMany();
         return divisions;
+    }
+
+    async getDivisionTree() {
+
+        const manager = getManager();
+        // const trees = await manager.getTreeRepository(Division).findTrees();
+        // console.log(trees);
+                
     }
 
     async getDivisionById(id: number): Promise<Division> {

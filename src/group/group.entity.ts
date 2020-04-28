@@ -10,7 +10,10 @@ export class Group implements IGroup {
     @Column()
     name: string;
 
-    @Column({nullable: true})
+    @Column({
+        nullable: true,
+        default: "code"
+    })
     code?: string;
 
     @CreateDateColumn()
@@ -18,9 +21,6 @@ export class Group implements IGroup {
     
     @UpdateDateColumn()
     date_modify?: Date;
-    
-    @Column({nullable: true})
-    count?: number;
 
     @OneToMany(type => User, user => user.group)
     users: User[];

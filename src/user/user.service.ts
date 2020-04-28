@@ -17,9 +17,9 @@ export class UserService {
         const query = this.userRepository.createQueryBuilder('user');
 
 
-        if (sort_by) {
-            query.orderBy(sort_by, "DESC");
-        }
+        // if (sort_by) {
+        //     query.orderBy(sort_by, "DESC");
+        // }
 
         if (filterDto.full_name) {
             query.andWhere('user.full_name = :full_name', { full_name })
@@ -30,10 +30,6 @@ export class UserService {
                 `(
                 user.login LIKE :search 
                 OR user.email LIKE :search
-                OR user.date_birth LIKE :search
-                OR user.date_create LIKE :search
-                OR user.date_modify LIKE :search
-                OR user.date_hire LIKE :search
                 )`,
                 { search: `%${search}%` }
             )

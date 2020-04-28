@@ -13,6 +13,21 @@ export enum ETaskTypeStart {
 	month = "month"
 }
 
+export interface IrequestParams {
+    start: number;
+    limit: number;
+    sort: ESort;
+    order_field: string;
+    search: string;
+
+}
+
+export enum ESort {
+	asc = "asc",
+	desc = "desc"
+}
+
+
 export interface IUser {
 	id?: number;
 	login: string;
@@ -52,4 +67,6 @@ export interface IDivision {
 	name: string;
 
 }
+
+export const alowedFields = ['name', 'login', 'email', 'code'];
 

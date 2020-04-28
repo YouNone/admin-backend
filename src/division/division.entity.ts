@@ -1,13 +1,15 @@
 import { IDivision } from './../share/type';
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, OneToMany, Tree } from "typeorm";
 
 @Entity()
+@Tree("adjacency-list")
+
 export class Division implements IDivision {
     @PrimaryGeneratedColumn()
     id: number;
     
     @Column({nullable: true})
-    parent_id: number;
+    parent_id: number | null;
 
     @Column()
     name: string;

@@ -40,3 +40,70 @@ user.city_id = 10
 city -> id = 10 name = Kiev
 city_id -> foreign key -> city 
 
+
+
+// search: [_______________________________]  [submit]
+//      ^   from [_____] to  [_____] [hire ^]
+
+
+
+// login LIKE str OR
+// email LIKE str OR
+// full_name LIKE str
+
+// ORDER BY {col_name} ASC | DESC
+
+// field=name&order=asc
+// {
+//     sort: 'asc',
+//     order_field: 'name',
+//     search: 'faghad',
+//     start: 0,
+//     limit: 10
+
+// }
+
+
+// req.field = "name; drop table user;"
+// const fields = ['name', 'id', 'code', 'login']
+// ---------------------
+// const order = req.order.tolowercase() == 'ask' ? 'ask': 'desc';
+// const field = req.field.tolowercase() 
+// if(!fields.find(field)) throw new typeError("error")
+
+export interface IrequestParams {
+    start: number;
+    limit: number;
+    sort: 'ask' | 'desc';
+    order_field: string;
+    search: string;
+
+}
+
+class ParseQuery implements IrequestParams{
+    start: number;
+    limit: number;
+    sort: "ask" | "desc";
+    order_field: string;
+    search: string;
+
+    constructor(params: any) {
+        this.start = params.start || parseInt(params.start) || 0;
+        this.limit = params.limit || parseInt(params.limit) || 20;
+        this.sort = params.sort || params.sort.tolowercase() == 'ask' ? 'ask': 'desc';
+        if(params.order_field) {
+            const field_name = params.order_field.tolowercase();
+            this.order_field = fields.find(field_name) ? field_name : 'name';
+        } else {
+
+        }
+    }
+}
+
+
+//  user
+let fields = Object.keys(new User())
+const params = new ParseQuery(request, fields)
+
+
+###############################

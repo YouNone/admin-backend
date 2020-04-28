@@ -1,10 +1,10 @@
+import { ParseQuery } from './../share/parse.query';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
 import { Group } from './group.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { GroupQueryDto } from './dto/group-query.dto';
 
 @Injectable()
 export class GroupService {
@@ -12,27 +12,26 @@ export class GroupService {
         @InjectRepository(Group) private groupRepository: Repository<Group>
     ) { }
 
-    async getGroupsList(filterDto: GroupQueryDto): Promise<Group[]> {
-        const { search, name } = filterDto;
-        const query = this.groupRepository.createQueryBuilder('Group');
+    async getGroupsList(incomeQuery: ParseQuery): Promise<Group[]> {
+        const searchOpt = new ParseQuery(incomeQuery, Object.keys(new Group()));
+        // console.log(searchOpt);
+        console.log(incomeQuery);
+        
+        const query = this.groupRepository
+        .createQueryBuilder('gr')
+        .select(['gr.id', 'gr.code', 'gr.name', 'gr.date_create', 'gr.date_modify'])
+        .skip(searchOpt.start)
+        .take(searchOpt.limit)
+        .where('gr.name LIKE :name OR gr.code LIKE :name', {name: `%${searchOpt.search}%`})
+        .orderBy(searchOpt.order_field).getMany();
 
-        if (filterDto.name) {
-            query.andWhere('group.name = :name', { name })
-        }
+        // this.groupRepository.find({
+        //     where: [
+        //         {name: `group1 test 1`}
+        //     ]
+        // });
 
-        if (filterDto.search) {
-            query.andWhere(
-                `(
-                group.login LIKE :search 
-                OR group.date_create LIKE :search
-                OR group.date_modify LIKE :search
-                )`,
-                { search: `%${search}%` }
-            )
-        }
-
-        const groups = query.getMany();
-        return groups;
+        return await query;
     }
 
     async getGroupById(id: number): Promise<Group> {

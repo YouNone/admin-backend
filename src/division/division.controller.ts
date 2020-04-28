@@ -13,8 +13,13 @@ export class DivisionController {
 
     @Get()
     getAllDivisions(@Query() filterDto: DivisionFilterDto) {
-       return this.divisionService.getDivisionsList(filterDto);
+        return this.divisionService.getDivisionsList(filterDto);
     }
+
+    // @Get('tree')
+    // getDivisionsTree() {
+    //     return this.divisionService.getDivisionTree();
+    // }
 
     @Get(':id')
     GetDivisionbyId(@Param('id', ParseIntPipe) id: number): Promise<Division> {
@@ -29,16 +34,16 @@ export class DivisionController {
     }
 
     @Put(':id')
-	async updateItem(
+    async updateItem(
         @Param('id', ParseIntPipe) id: number,
         @Body() updateDivisionDto: UpdateDivisionDto
-        ) {
+    ) {
         // return JSON.stringify(updateDivisionDto);
         return this.divisionService.updateDivision(id, updateDivisionDto);
-	}
+    }
 
     @Delete(':id')
     async deleteDivision(@Param('id', ParseIntPipe) id: number) {
-        return  this.divisionService.deleteDivision(id);
+        return this.divisionService.deleteDivision(id);
     }
 }

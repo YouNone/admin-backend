@@ -1,3 +1,4 @@
+
 GET http://localhost:3000/users HTTP/1.1
 
 ###
@@ -36,7 +37,12 @@ content-type: application/json
 }
 
 ###
-GET http://localhost:3000/users/1 HTTP/1.1
+GET http://localhost:3000/groups?start=0&limit=10&sort=desc&search=273193weqw342&order_field=code HTTP/1.1
+
+###
+
+###
+GET http://localhost:3000/groups HTTP/1.1
 
 ###
 
@@ -68,8 +74,8 @@ POST http://localhost:3000/divisions HTTP/1.1
 content-type: application/json
 
 { 
-    "name": "second row division 1",
-    "parent_id": 2
+    "name": "third row division test",
+    "parent": 5
 }
 
 ###
