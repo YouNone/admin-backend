@@ -1,7 +1,8 @@
+import { ParseQuery } from './../share/parse.query';
+import { alowedFields } from './../share/type';
 import { Division } from './division.entity';
 import { DivisionService } from './division.service';
 import { Controller, Post, UsePipes, Param, Get, Put, Body, Delete, ParseIntPipe, ValidationPipe, Query } from '@nestjs/common';
-import { DivisionFilterDto } from './dto/division.filter.dto';
 import { CreateDivisionDto } from './dto/create.division.dto';
 import { UpdateDivisionDto } from './dto/update.division.dto';
 
@@ -12,8 +13,9 @@ export class DivisionController {
     ) { }
 
     @Get()
-    getAllDivisions(@Query() filterDto: DivisionFilterDto) {
-        return this.divisionService.getDivisionsList(filterDto);
+    getAllDivisions(@Query() queryParser) {
+        const searcParams = new ParseQuery(queryParser, alowedFields);
+        return this.divisionService.getDivisionsList(searcParams);
     }
 
     // @Get('tree')

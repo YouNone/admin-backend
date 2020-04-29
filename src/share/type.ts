@@ -32,7 +32,7 @@ export interface IUser {
 	id?: number;
 	login: string;
 	email: string;
-	full_name: string;
+	name: string;
 	sex: ESex;
 	password: string;
 	group_id: number
@@ -68,5 +68,5 @@ export interface IDivision {
 
 }
 
-export const alowedFields = ['name', 'login', 'email', 'code'];
+export const alowedFields = ['name', 'login', 'email', 'code', 'full_name'];
 

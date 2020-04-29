@@ -12,7 +12,6 @@ export class ParseQuery implements IrequestParams {
         this.limit = Number(params.limit) || 20;
         this.sort = params.sort || ESort.asc;
         this.search = params.search || "";
-
         this.order_field = params.order_field && fields.includes(params.order_field) ? params.order_field : defaultFieldName;
 
         // if(params.order_field) {

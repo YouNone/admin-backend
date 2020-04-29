@@ -23,14 +23,8 @@ export class GroupService {
         .skip(searchOpt.start)
         .take(searchOpt.limit)
         .where('gr.name LIKE :name OR gr.code LIKE :name', {name: `%${searchOpt.search}%`})
-        .orderBy(searchOpt.order_field).getMany();
-
-        // this.groupRepository.find({
-        //     where: [
-        //         {name: `group1 test 1`}
-        //     ]
-        // });
-
+        .orderBy(searchOpt.order_field)
+        .getMany();
         return await query;
     }
 

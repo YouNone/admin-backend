@@ -1,4 +1,5 @@
-import { GetUserFilterDto } from './dto/get-user-filter.dto';
+import { alowedFields } from './../share/type';
+import { ParseQuery } from './../share/parse.query';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,8 +13,9 @@ export class UserController {
     ) { }
 
     @Get()
-    getAllUsers(@Query() filterDto: GetUserFilterDto) {
-       return this.userService.getUsersList(filterDto);
+    getAllUsers(@Query() queryParser) {
+        const searcParams = new ParseQuery(queryParser, alowedFields);
+        return this.userService.getUsersList(searcParams);
     }
 
     @Get(':id')
@@ -29,16 +31,16 @@ export class UserController {
     }
 
     @Put(':id')
-	async updateItem(
+    async updateItem(
         @Param('id', ParseIntPipe) id: number,
         @Body() updateUserDto: UpdateUserDto
-        ) {
+    ) {
         // return JSON.stringify(updateUserDto);
         return this.userService.updateUser(id, updateUserDto);
-	}
+    }
 
     @Delete(':id')
     async deleteUser(@Param('id', ParseIntPipe) id: number) {
-        return  this.userService.deleteUser(id);
+        return this.userService.deleteUser(id);
     }
 }

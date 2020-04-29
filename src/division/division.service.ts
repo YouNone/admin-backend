@@ -1,3 +1,4 @@
+import { ParseQuery } from './../share/parse.query';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 import { CreateDivisionDto } from './dto/create.division.dto';
@@ -5,8 +6,6 @@ import { Division } from './division.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, TreeRepository, getManager } from 'typeorm';
 import { UpdateDivisionDto } from './dto/update.division.dto';
-import { DivisionFilterDto } from './dto/division.filter.dto';
-
 @Injectable()
 
 export class DivisionService {
@@ -18,19 +17,19 @@ export class DivisionService {
 
     ) { }
 
-    async getDivisionsList(filterDto: DivisionFilterDto): Promise<Division[]> {
-        const { search, name } = filterDto;
-        const query = this.divisionRepository.createQueryBuilder('division');
-
-        // if (filterDto.search) {
-        //     query.andWhere('division.name = :name', {name: `%${name}%`});
-        // }
-
-        if (filterDto.name) {
-            query.andWhere('division.name = :name',  {name: `%${name}%`})
-        }
-        const divisions = query.getMany();
-        return divisions;
+    async getDivisionsList(incomeQuery: ParseQuery): Promise<Division[]> {
+        const searchOpt = new ParseQuery(incomeQuery, Object.keys(new Division()));
+        // console.log(searchOpt);
+        console.log(incomeQuery);
+        
+        const query = this.divisionRepository
+        .createQueryBuilder('divis')
+        .skip(searchOpt.start)
+        .take(searchOpt.limit)
+        .where('divis.name LIKE :name', {name: `%${searchOpt.search}%`})
+        .orderBy(searchOpt.order_field)
+        .getMany();
+        return await query;
     }
 
     async getDivisionTree() {

@@ -10,7 +10,7 @@ export class User implements IUser {
     id: number;
     
     @Column()
-    full_name: string;
+    name: string;
 
     @Column()
     login: string;

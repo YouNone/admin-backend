@@ -1,4 +1,4 @@
-import { GetUserFilterDto } from './dto/get-user-filter.dto';
+import { ParseQuery } from './../share/parse.query';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -12,31 +12,42 @@ export class UserService {
         @InjectRepository(User) private userRepository: Repository<User>
     ) { }
 
-    async getUsersList(filterDto: GetUserFilterDto): Promise<User[]> {
-        const { search, full_name, sort_by } = filterDto;
-        const query = this.userRepository.createQueryBuilder('user');
+    async getUsersList(incomeQuery: ParseQuery): Promise<User[]> {
+        const searchOpt = new ParseQuery(incomeQuery, Object.keys(new User()));
+        console.log(incomeQuery);
+        const query = this.userRepository
+            .createQueryBuilder('usr')
+            .skip(searchOpt.start)
+            .take(searchOpt.limit)
+            .where(
+                `usr.name LIKE :name 
+                 OR usr.login LIKE :name
+                 OR usr.email LIKE :name
+                `,
+                { name: `%${searchOpt.search}%` })
+            .orderBy(searchOpt.order_field)
+            .getMany();
+        return await query;
 
-
+        // const { search, name, sort_by } = filterDto;
+        // const query = this.userRepository.createQueryBuilder('user');
         // if (sort_by) {
         //     query.orderBy(sort_by, "DESC");
         // }
-
-        if (filterDto.full_name) {
-            query.andWhere('user.full_name = :full_name', { full_name })
-        }
-
-        if (filterDto.search) {
-            query.andWhere(
-                `(
-                user.login LIKE :search 
-                OR user.email LIKE :search
-                )`,
-                { search: `%${search}%` }
-            )
-        }
-
-        const users = query.getMany();
-        return users;
+        // if (filterDto.name) {
+        //     query.andWhere('user.name = :name', { name })
+        // }
+        // if (filterDto.search) {
+        //     query.andWhere(
+        //         `(
+        //         user.login LIKE :search 
+        //         OR user.email LIKE :search
+        //         )`,
+        //         { search: `%${search}%` }
+        //     )
+        // }
+        // const users = query.getMany();
+        // return users;
     }
 
     async getUserById(id: number): Promise<User> {
@@ -51,11 +62,7 @@ export class UserService {
         return await this.userRepository.save(createUserDto);
     }
 
-    async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
-        // const found = await this.getUserById(id);
-        // // console.log('found', found);
-        // // console.log('updateUserDto', updateUserDto);
-        // return await this.userRepository.update(id, {updateUserDto});
+    async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {   
         updateUserDto.id = id;
         return await this.userRepository.save(updateUserDto);
 
