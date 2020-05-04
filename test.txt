@@ -70,7 +70,7 @@ content-type: application/json
 
 ###
 
-DELETE http://localhost:3000/groups/3 HTTP/1.1
+GET http://localhost:3000/divisions/tree HTTP/1.1
 content-type: application/json
 
 ###
@@ -79,11 +79,18 @@ POST http://localhost:3000/divisions HTTP/1.1
 content-type: application/json
 
 { 
-    "name": "third row division test",
-    "parent": 5
+    "name": "another post request test division",
+    "parent": {
+        "id": 10
+    }
 }
 
 ###
 
 GET http://localhost:3000/divisions HTTP/1.1
+content-type: application/json
+
+###
+
+DELETE http://localhost:3000/divisions/ HTTP/1.1
 content-type: application/json

@@ -18,10 +18,15 @@ export class DivisionController {
         return this.divisionService.getDivisionsList(searcParams);
     }
 
-    // @Get('tree')
-    // getDivisionsTree() {
-    //     return this.divisionService.getDivisionTree();
-    // }
+    @Get('/tree')
+    getDivisionsTree() {
+        return this.divisionService.getDivisionTree();
+    }
+
+    @Post('/tree')
+    getDivisionsTreeItem(@Body() createDivisionDto: CreateDivisionDto) {        
+        return this.divisionService.CreateDivisionTreeItem(createDivisionDto);
+    }
 
     @Get(':id')
     GetDivisionbyId(@Param('id', ParseIntPipe) id: number): Promise<Division> {
@@ -42,7 +47,7 @@ export class DivisionController {
     ) {
         // return JSON.stringify(updateDivisionDto);
         return this.divisionService.updateDivision(id, updateDivisionDto);
-    }
+    } 
 
     @Delete(':id')
     async deleteDivision(@Param('id', ParseIntPipe) id: number) {

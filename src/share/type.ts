@@ -63,7 +63,7 @@ export interface IGroup {
 
 export interface IDivision {
 	id?: number;
-	parent_id: number | null;
+	// parentId: number | null;
 	name: string;
 
 }

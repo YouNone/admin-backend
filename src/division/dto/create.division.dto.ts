@@ -1,6 +1,12 @@
-import { IsNotEmpty } from "class-validator";
+import { IsNotEmpty, IsOptional } from "class-validator";
 
 export class CreateDivisionDto {
     @IsNotEmpty()
-    name: string;
+    name: string;  
+        
+    @IsOptional()
+    parent: {
+        id: number
+    }
+   
 }
