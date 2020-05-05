@@ -1,3 +1,4 @@
+import { DeleteExeption } from './../share/errorhandlers/deleteExeption';
 import { ParseQuery } from './../share/parse.query';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './user.entity';
@@ -28,26 +29,6 @@ export class UserService {
             .orderBy(searchOpt.order_field)
             .getMany();
         return await query;
-
-        // const { search, name, sort_by } = filterDto;
-        // const query = this.userRepository.createQueryBuilder('user');
-        // if (sort_by) {
-        //     query.orderBy(sort_by, "DESC");
-        // }
-        // if (filterDto.name) {
-        //     query.andWhere('user.name = :name', { name })
-        // }
-        // if (filterDto.search) {
-        //     query.andWhere(
-        //         `(
-        //         user.login LIKE :search 
-        //         OR user.email LIKE :search
-        //         )`,
-        //         { search: `%${search}%` }
-        //     )
-        // }
-        // const users = query.getMany();
-        // return users;
     }
 
     async getUserById(id: number): Promise<User> {
@@ -71,15 +52,7 @@ export class UserService {
     async  deleteUser(id: number): Promise<void> {
         const result = await this.userRepository.delete(id);
         if (result.affected === 0) {
-            throw new NotFoundException(`User with id "${id}" is not  found`);
+            throw new DeleteExeption(id);
         }
-
-        // const found = await this.getUserById(id);
-        // if (!found) {
-        //     throw new NotFoundException(`User with id ${id} not found`);
-        // }
-        // const delUser = await this.userRepository.delete(id);
-        // // if(delUser.affected === 0) throw new NotFoundException(` 2 User with id ${id} not found`);
-        // return found;
     }
 }

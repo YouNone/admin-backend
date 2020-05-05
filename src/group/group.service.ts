@@ -1,3 +1,4 @@
+import { DeleteExeption } from './../share/errorhandlers/deleteExeption';
 import { ParseQuery } from './../share/parse.query';
 import { CreateGroupDto } from './dto/create-group.dto';
 import { UpdateGroupDto } from './dto/update-group.dto';
@@ -49,7 +50,7 @@ export class GroupService {
     async  deleteGroup(id: number): Promise<void> {
         const result = await this.groupRepository.delete(id);
         if (result.affected === 0) {
-            throw new NotFoundException(`Group with id "${id}" is not  found`);
+            throw new DeleteExeption(id);
         }
     }
 }

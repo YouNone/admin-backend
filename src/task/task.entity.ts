@@ -1,6 +1,7 @@
 import { ETaskTypeStart } from './../share/type';
-import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { BaseEntity, Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from "typeorm";
 import { ESex } from "src/share/type";
+import { User } from 'src/user/user.entity';
 
 @Entity()
 export class Task extends BaseEntity {
@@ -8,7 +9,7 @@ export class Task extends BaseEntity {
     @PrimaryGeneratedColumn()
     id: number;
     
-    @Column()
+    @Column({nullable: true})
     code?: string;
     
     @Column()
@@ -20,28 +21,32 @@ export class Task extends BaseEntity {
     @UpdateDateColumn()
     date_modify?: string;
     
-    @Column()
+    @Column({nullable: true})
     date_execute?: string;
     
     @Column()
     type_start?: ETaskTypeStart;
     
-    @Column()
+    @Column({nullable: true})
     date_start?: string;
     
-    @Column()
+    @Column({nullable: true})
     date_end?: string;
     
-    @Column()
+    @Column({nullable: true})
     time_start?: string;
     
-    @Column()
+    @Column({nullable: true})
     time_end?: string;
     
-    @Column()
+    @Column({nullable: true})
     execute_point?: string;
     
-    @Column()
+    @Column({nullable: true})
     script?: string;
+
+    // @ManyToMany(type => User)
+    // @JoinTable()
+    // users: User[];
 
 }

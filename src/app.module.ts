@@ -15,6 +15,7 @@ import { TaskController } from './task/task.controller';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Group } from './group/group.entity';
+import { Task } from './task/task.entity';
 
 @Module({
   imports: [
@@ -22,7 +23,8 @@ import { Group } from './group/group.entity';
     TypeOrmModule.forFeature([
       User,
       Group,
-      Division
+      Division,
+      Task
     ])
   ],
   controllers: [

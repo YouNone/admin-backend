@@ -94,3 +94,25 @@ content-type: application/json
 
 DELETE http://localhost:3000/divisions/ HTTP/1.1
 content-type: application/json
+
+
+###
+
+POST http://localhost:3000/tasks HTTP/1.1
+content-type: application/json
+
+{ 
+    "name": " test 1",
+    "code": "232443342234",
+    "date_create": "2020-04-21T16:27:32.936Z",
+    "date_execute": "2020-04-21T16:27:32.936Z",
+    "date_start": "2020-04-21T16:27:32.936Z",
+    "type_start": "never"   
+}
+
+###
+
+GET http://localhost:3000/tasks?start=0&limit=10&sort=desc&search=test&order_field=code HTTP/1.1
+content-type: application/json
+
+###

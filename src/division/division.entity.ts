@@ -1,6 +1,11 @@
 import { Entity, PrimaryGeneratedColumn, Column, Tree, TreeChildren, TreeParent } from "typeorm";
 
-@Entity()
+@Entity({
+    orderBy: {
+        name: "ASC",
+        id: "DESC"
+    }
+})
 @Tree("nested-set")
 
 export class Division {

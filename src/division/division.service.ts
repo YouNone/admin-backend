@@ -1,3 +1,4 @@
+import { DeleteExeption } from './../share/errorhandlers/deleteExeption';
 import { ParseQuery } from './../share/parse.query';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
@@ -32,7 +33,6 @@ export class DivisionService {
         // первый вариант получения дерева
         // const manager = getManager();
         // const treeCategories = await manager.getTreeRepository(Division).findTrees();
-        // const q = await this.divisionRepository.createQueryBuilder()
 
         const treeCategories = await this.divisionRepository.findTrees();        
         return treeCategories;
@@ -78,7 +78,7 @@ export class DivisionService {
  
         const result = await this.divisionRepository.delete(id);        
         if (result.affected === 0) {
-            throw new NotFoundException(`Division with id "${id}" is not  found`);
+            throw new DeleteExeption(id);
         }
         return {raw: result.raw, affected: result.affected };
     }
