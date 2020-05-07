@@ -17,10 +17,10 @@ export class Group implements IGroup {
     code?: string;
 
     @CreateDateColumn()
-    date_create?: Date;
+    date_create?: string;
     
     @UpdateDateColumn()
-    date_modify?: Date;
+    date_modify?: string;
 
     @OneToMany(type => User, user => user.group)
     users: User[];

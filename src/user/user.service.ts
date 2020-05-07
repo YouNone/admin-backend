@@ -10,13 +10,13 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class UserService {
     constructor(
-        @InjectRepository(User) private userRepository: Repository<User>
+        @InjectRepository(User) private repo: Repository<User>
     ) { }
 
     async getUsersList(incomeQuery: ParseQuery): Promise<User[]> {
         const searchOpt = new ParseQuery(incomeQuery, Object.keys(new User()));
         console.log(incomeQuery);
-        const query = this.userRepository
+        const query = this.repo
             .createQueryBuilder('usr')
             .skip(searchOpt.start)
             .take(searchOpt.limit)
@@ -26,13 +26,13 @@ export class UserService {
                  OR usr.email LIKE :name
                 `,
                 { name: `%${searchOpt.search}%` })
-            .orderBy(searchOpt.order_field)
+            .orderBy({ [searchOpt.sort]: searchOpt.order })
             .getMany();
         return await query;
     }
 
     async getUserById(id: number): Promise<User> {
-        const found = this.userRepository.findOne(id);
+        const found = this.repo.findOne(id);
         if (!found) {
             throw new NotFoundException(`User with id ${id} not found`);
         }
@@ -40,17 +40,17 @@ export class UserService {
     }
 
     async createUser(createUserDto: CreateUserDto): Promise<User> {
-        return await this.userRepository.save(createUserDto);
+        return await this.repo.save(createUserDto);
     }
 
-    async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {   
+    async updateUser(id: number, updateUserDto: UpdateUserDto): Promise<User> {
         updateUserDto.id = id;
-        return await this.userRepository.save(updateUserDto);
+        return await this.repo.save(updateUserDto);
 
     }
 
     async  deleteUser(id: number): Promise<void> {
-        const result = await this.userRepository.delete(id);
+        const result = await this.repo.delete(id);
         if (result.affected === 0) {
             throw new DeleteExeption(id);
         }

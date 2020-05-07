@@ -12,19 +12,19 @@ import { UpdateDivisionDto } from './dto/update.division.dto';
 export class DivisionService {
     constructor(
         @InjectRepository(Division)
-        private divisionRepository: TreeRepository<Division>
+        private repo: TreeRepository<Division>
     ) { }
 
     async getDivisionsList(incomeQuery: ParseQuery): Promise<Division[]> {
         const searchOpt = new ParseQuery(incomeQuery, Object.keys(new Division()));
         console.log(incomeQuery);
 
-        const query = this.divisionRepository
+        const query = this.repo
             .createQueryBuilder('divis')
             .skip(searchOpt.start)
             .take(searchOpt.limit)
             .where('divis.name LIKE :name', { name: `%${searchOpt.search}%` })
-            .orderBy(searchOpt.order_field)
+            .orderBy({[searchOpt.sort]: searchOpt.order})
             .getMany();
         return await query;
     }
@@ -34,23 +34,23 @@ export class DivisionService {
         // const manager = getManager();
         // const treeCategories = await manager.getTreeRepository(Division).findTrees();
 
-        const treeCategories = await this.divisionRepository.findTrees();        
+        const treeCategories = await this.repo.findTrees();        
         return treeCategories;
     }
 
     async CreateDivisionTreeItem(createDivisionDto: CreateDivisionDto): Promise<Division> {
-        // const divisionParent = await this.divisionRepository.findOne(createDivisionDto.parent.id);
+        // const divisionParent = await this.repo.findOne(createDivisionDto.parent.id);
         // const division: Division = {
         //     name: createDivisionDto.name,
         //     parent: {
         //         id: (await divisionParent).id,
         //     }
         // }
-        return this.divisionRepository.save(createDivisionDto);
+        return this.repo.save(createDivisionDto);
     }
 
     async getDivisionById(id: number): Promise<Division> {
-        const found = await this.divisionRepository.findOne(id);
+        const found = await this.repo.findOne(id);
         
         if (!found) {
             throw new NotFoundException(`Division with id ${id} not found`);
@@ -59,16 +59,16 @@ export class DivisionService {
     }
 
     async createDivision(createDivisionDto: CreateDivisionDto): Promise<Division> {
-        return await this.divisionRepository.save(createDivisionDto);
+        return await this.repo.save(createDivisionDto);
     }
 
     async updateDivision(id: number, updateDivisionDto: UpdateDivisionDto): Promise<Division> {
         updateDivisionDto.id = id;
-        return await this.divisionRepository.save(updateDivisionDto);
+        return await this.repo.save(updateDivisionDto);
 
     }
 
-    async  deleteDivision(id: number): Promise<DeleteResult> {
+    async  deleteDivision(id: number): Promise<Division> {
         const delDivision = await this.getDivisionById(id);
         console.log(delDivision);
         
@@ -76,11 +76,11 @@ export class DivisionService {
             throw new NotFoundException(`you cannot delete division with children!`);
         }
  
-        const result = await this.divisionRepository.delete(id);        
+        const result = await this.repo.delete(id);        
         if (result.affected === 0) {
             throw new DeleteExeption(id);
         }
-        return {raw: result.raw, affected: result.affected };
+        return delDivision;
     }
 
 }

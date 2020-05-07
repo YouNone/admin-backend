@@ -1,3 +1,6 @@
+import { ScaleService } from './scale/scale.service';
+import { ScaleController } from './scale/scale.controller';
+import { Scale } from './scale/scale.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Module } from '@nestjs/common';
 
@@ -24,7 +27,8 @@ import { Task } from './task/task.entity';
       User,
       Group,
       Division,
-      Task
+      Task,
+      Scale
     ])
   ],
   controllers: [
@@ -32,6 +36,7 @@ import { Task } from './task/task.entity';
     GroupController,
     UserController,
     TaskController,
+    ScaleController,
     AppController
   ],
   providers: [
@@ -39,6 +44,7 @@ import { Task } from './task/task.entity';
     GroupService,
     TaskService,
     UserService,
+    ScaleService,
     AppService
   ],
 })

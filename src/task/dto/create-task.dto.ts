@@ -1,5 +1,5 @@
 import { ETaskTypeStart } from './../../share/type';
-import { IsNotEmpty, IsOptional } from 'class-validator';
+import { IsNotEmpty, IsOptional, IsIn, IsDateString, IsMilitaryTime } from 'class-validator';
 export class CreateTaskDto {
 	/** Код */
 	@IsOptional()
@@ -9,36 +9,33 @@ export class CreateTaskDto {
 	@IsNotEmpty()
 	name: string;
 
-	/** дата создания */
-	@IsNotEmpty()
-	date_create: string;
-
-	/** дата редактирования */
-	@IsOptional()
-	date_modify?: string;
-
 	@IsOptional()
 	/** дата выполнения */
 	date_execute?: string;
 
 	@IsOptional()
+	@IsIn(Object.values(ETaskTypeStart))
 	/** Период выполнения */
-	type_start?: ETaskTypeStart;
+	type_start: string;
 
 	@IsOptional()
+	@IsDateString()
 	/** Дата начала запуска */
 	date_start?: string;
 
 	@IsOptional()
+	@IsDateString()
 	/** Дата окончания запуска */
 	date_end?: string;
 
 	/** Запускать с / Время запуска */
 	@IsOptional()
+	@IsMilitaryTime()
 	time_start?: string;
 
 	/** Запускать по */
 	@IsOptional()
+	@IsMilitaryTime()
 	time_end?: string;
 
 	/** Периодичность запуска (мин) / В день: */

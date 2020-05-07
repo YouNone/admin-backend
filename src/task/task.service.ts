@@ -11,24 +11,24 @@ import { UpdateTaskDto } from './dto/update-task.dto';
 export class TaskService {
 
     constructor(
-        @InjectRepository(Task) private taskRepository: Repository<Task>
+        @InjectRepository(Task) private repo: Repository<Task>
     ) { }
 
     async getTasksList(incomeQuery: ParseQuery): Promise<Task[]> {
         const searchOpt = new ParseQuery(incomeQuery, Object.keys(new Task()));
-        console.log(incomeQuery);
+        // console.log(searchOpt);
         
-        const query = this.taskRepository
+        const query = this.repo
         .createQueryBuilder('task')
         .skip(searchOpt.start)
         .take(searchOpt.limit)
         .where('task.name LIKE :name OR task.code LIKE :name', {name: `%${searchOpt.search}%`})
-        .orderBy(searchOpt.order_field)
+        .orderBy({[searchOpt.sort]: searchOpt.order})
         .getMany();
         return await query;
     }
     async getTaskById(id: number): Promise<Task> {
-        const found = await this.taskRepository.findOne(id);
+        const found = await this.repo.findOne(id);
 
         if (!found) {
             throw new NotFoundException(`Task with id ${id} not found`);
@@ -37,23 +37,20 @@ export class TaskService {
     }
 
     async createTask(createTaskDto: CreateTaskDto): Promise<Task> {
-        return await this.taskRepository.save(createTaskDto);
+        return await this.repo.save(createTaskDto);
     }
 
     async updateTask(id: number, updateTaskDto: UpdateTaskDto): Promise<Task> {
         updateTaskDto.id = id;
-        return await this.taskRepository.save(updateTaskDto);
+        return await this.repo.save(updateTaskDto);
     }
 
-    async deleteTask(id: number): Promise<DeleteResult> {
+    async deleteTask(id: number): Promise<Task> {
         const delTask = await this.getTaskById(id);
-        console.log(delTask);
-
-        const result = await this.taskRepository.delete(id);
+        const result = await this.repo.delete(id);
         if (result.affected === 0) {
             throw new DeleteExeption(id);
         }
-        return { raw: result.raw, affected: result.affected };
+        return delTask;
     }
-
 }

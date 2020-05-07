@@ -24,23 +24,23 @@ export class User implements IUser {
     @Column()
     password: string;
     
-    @Column()
+    @Column({nullable: true})
     group_id: number
 
     @Column()
-    date_birth: Date;
+    date_birth: string;
     
     @CreateDateColumn()
-    date_create: Date;
+    date_create: string;
     
     @UpdateDateColumn()
-    date_modify: Date;
+    date_modify: string;
     
     @Column()
-    date_hire: Date;
+    date_hire: string;
     
 	@Column({nullable: true})
-    date_fire?: Date;
+    date_fire?: string;
     
     @ManyToOne(type => Group, group => group.users)
     group: Group;

@@ -12,7 +12,7 @@ export class CreateUserDto {
 
 	@IsNotEmpty()
 	@MinLength(5)
-	full_name: string;
+	name: string;
 
 	@IsNotEmpty()
 	sex: ESex;
@@ -21,12 +21,12 @@ export class CreateUserDto {
 	@MinLength(5)
 	password: string;
 
-	@IsNotEmpty()
-	date_birth: Date;
+	@IsNotEmpty() 
+	date_birth: string;
 
 	@IsNotEmpty()
-	date_hire: Date;
+	date_hire: string;
 
 	@IsOptional()
-	date_fire?: Date;
+	date_fire?: string;
 }

@@ -16,15 +16,16 @@ export enum ETaskTypeStart {
 export interface IrequestParams {
     start: number;
     limit: number;
-    sort: ESort;
-    order_field: string;
+    sort: string;
+    order: ESort;
+    // order_field: string;
     search: string;
 
 }
 
 export enum ESort {
-	asc = "asc",
-	desc = "desc"
+	asc = "ASC",
+	desc = "DESC"
 }
 
 
@@ -36,11 +37,11 @@ export interface IUser {
 	sex: ESex;
 	password: string;
 	group_id: number
-	date_birth: Date;
-	date_create: Date;
-	date_modify: Date;
-	date_hire: Date;
-	date_fire?: Date;
+	date_birth: string;
+	date_create: string;
+	date_modify: string;
+	date_hire: string;
+	date_fire?: string;
 }
 
 export interface IGroup {
@@ -51,8 +52,8 @@ export interface IGroup {
 	/** Код группы */
 	code?: string;
 	/** дата создания группы */
-	date_create?: Date;
-	date_modify?: Date;
+	date_create?: string;
+	date_modify?: string;
 	/** Количество пользователей группы */
 	count?: number;
 	/** Члены группы */
@@ -87,6 +88,55 @@ export interface ITask {
 	/** Код монако */
 	script?: string;
 }
+
+export interface IScale {
+	/** ID Шкалы */
+	id?: number;
+	/** Название шкалы */
+	name: string;
+	/** Код шкалы */
+	code?: string;
+	/** Тип шкалы */
+	type?: string;
+	/** Шкала, диапазон или буллит */
+	scale?: IScaleEnum | IScaleDiapasone;
+	/** Дата создания */
+	date_create?: Date;
+	/** Дата последнего изменения */
+	date_modify?: Date;
+}
+
+
+export interface IScaleDiapasone {
+	/** Минимальное значание */
+	min: number;
+	/** Максимальное значание */
+	max: number;
+	/** Шаг */
+	step: number;
+}
+
+
+/**
+ * Шкала буллита
+ *
+ * @export
+ * @interface IScaleEnumItem
+ */
+export interface IScaleEnumItem {
+	/** Ценность(оценка) */
+	value: number;
+	/** Описание */
+	description: string;
+}
+
+export enum EScaleType {
+	diapasone = 'diapasone',
+	enumerable = 'enumerable'
+}
+
+export declare type IScaleEnum = IScaleEnumItem[];
+
 export interface IDivision {
 	id?: number;
 	// parentId: number | null;
@@ -94,5 +144,5 @@ export interface IDivision {
 
 }
 
-export const alowedFields = ['name', 'login', 'email', 'code', 'full_name'];
+export const alowedFields = ['name', 'login', 'email', 'code', 'type_start', 'date_execute', 'type_start'];
 

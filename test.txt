@@ -1,6 +1,6 @@
 
 ###
-GET http://localhost:3000/users?start=0&limit=10&sort=desc&search=ALEX&order_field=name HTTP/1.1
+GET http://localhost:3000/users?start=0&limit=10&sort=desc&search=ALEX&sort=name HTTP/1.1
 
 ###
 
@@ -13,7 +13,7 @@ content-type: application/json
 
 { 
     "group_id": 2,
-    "full_name": "Username for user",
+    "name": "Username for user",
     "password": "4314333213332423",
     "login": "loginion",
     "email": "useritto@gmail.com",
@@ -31,7 +31,7 @@ content-type: application/json
 {     
     "login": "LOGIN ALEX",
     "email": "alex@gmail.com",
-    "full_name": "ALEX",
+    "name": "ALEX",
     "sex": "1",
     "password": "1111111",
     "date_birth": "1988-07-31T20:00:00.000Z",
@@ -42,7 +42,7 @@ content-type: application/json
 }
 
 ###
-GET http://localhost:3000/groups?start=0&limit=10&sort=desc&search=273193weqw342&order_field=code HTTP/1.1
+GET http://localhost:3000/groups?start=0&limit=10&sort=desc&search=273193weqw342&sort=code HTTP/1.1
 
 ###
 
@@ -112,7 +112,20 @@ content-type: application/json
 
 ###
 
-GET http://localhost:3000/tasks?start=0&limit=10&sort=desc&search=test&order_field=code HTTP/1.1
+GET http://localhost:3000/tasks?start=0&limit=10&order=desc&sort=code HTTP/1.1
 content-type: application/json
+
+###
+
+###
+
+POST http://localhost:3000/scales HTTP/1.1
+content-type: application/json
+
+{ 
+    "name": " test scale 1",
+    "code": "232443342234",
+    "scale": "{min: 0, step: 5, max 15 }"
+}
 
 ###

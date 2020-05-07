@@ -4,7 +4,7 @@ import { ESex } from "src/share/type";
 import { User } from 'src/user/user.entity';
 
 @Entity()
-export class Task extends BaseEntity {
+export class Task {
 
     @PrimaryGeneratedColumn()
     id: number;
@@ -25,7 +25,7 @@ export class Task extends BaseEntity {
     date_execute?: string;
     
     @Column()
-    type_start?: ETaskTypeStart;
+    type_start?: string;
     
     @Column({nullable: true})
     date_start?: string;
@@ -48,5 +48,6 @@ export class Task extends BaseEntity {
     // @ManyToMany(type => User)
     // @JoinTable()
     // users: User[];
+    constructor() {}
 
 }
