@@ -139,9 +139,19 @@ export declare type IScaleEnum = IScaleEnumItem[];
 
 export interface IDivision {
 	id?: number;
-	// parentId: number | null;
 	name: string;
 
+}
+
+export interface IUniversalTreeNode {
+	/** ID узла дерева. Только String! При очень больших числах JS теряет младшие разряды */
+	id?: number,
+	/** Текстовое представление узла дерева */
+	name: string;
+	/** Наследники текущего узла */
+	children?: IUniversalTreeNode[];
+	/** ID родителя записи. Если элемент является корнем дерева, это поле равно NULL или не определено */
+	parent_id?: number;	
 }
 
 export const alowedFields = ['name', 'login', 'email', 'code', 'type_start', 'date_execute', 'type_start'];

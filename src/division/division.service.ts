@@ -19,13 +19,17 @@ export class DivisionService {
         const searchOpt = new ParseQuery(incomeQuery, Object.keys(new Division()));
         console.log(incomeQuery);
 
-        const query = this.repo
-            .createQueryBuilder('divis')
-            .skip(searchOpt.start)
-            .take(searchOpt.limit)
-            .where('divis.name LIKE :name', { name: `%${searchOpt.search}%` })
-            .orderBy({[searchOpt.sort]: searchOpt.order})
-            .getMany();
+        // const query = this.repo
+        //     .createQueryBuilder('divis')
+        //     .skip(searchOpt.start)
+        //     .take(searchOpt.limit)
+        //     .where('divis.name LIKE :name', { name: `%${searchOpt.search}%` })
+        //     .orderBy({[searchOpt.sort]: searchOpt.order})
+        //     .getMany();
+
+        const query = this.repo.query(`
+                SELECT id, name, parent_id FROM dbo.division
+            `);
         return await query;
     }
 
@@ -34,7 +38,7 @@ export class DivisionService {
         // const manager = getManager();
         // const treeCategories = await manager.getTreeRepository(Division).findTrees();
 
-        const treeCategories = await this.repo.findTrees();        
+        const treeCategories = await this.repo.findTrees();
         return treeCategories;
     }
 
@@ -50,12 +54,15 @@ export class DivisionService {
     }
 
     async getDivisionById(id: number): Promise<Division> {
-        const found = await this.repo.findOne(id);
-        
-        if (!found) {
+        const item = await this.repo.findOne(id);
+
+        if (!item) {
             throw new NotFoundException(`Division with id ${id} not found`);
         }
-        return found;
+        console.log(item);
+        
+        item.parent = await this.repo.findOne(item.parent_id);
+        return item;
     }
 
     async createDivision(createDivisionDto: CreateDivisionDto): Promise<Division> {
@@ -71,12 +78,12 @@ export class DivisionService {
     async  deleteDivision(id: number): Promise<Division> {
         const delDivision = await this.getDivisionById(id);
         console.log(delDivision);
-        
+
         if (delDivision.children) {
             throw new NotFoundException(`you cannot delete division with children!`);
         }
- 
-        const result = await this.repo.delete(id);        
+
+        const result = await this.repo.delete(id);
         if (result.affected === 0) {
             throw new DeleteExeption(id);
         }

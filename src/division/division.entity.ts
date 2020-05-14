@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, Tree, TreeChildren, TreeParent } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, Tree, TreeChildren, TreeParent, JoinColumn } from "typeorm";
 
 @Entity({
     orderBy: {
@@ -15,9 +15,16 @@ export class Division {
     @Column()
     name: string;
 
+    @Column({nullable: true})
+    code: string;
+
+    @Column({nullable: true})
+    parent_id: number;
+
     @TreeChildren()
     children: Division[];
 
     @TreeParent()
+    @JoinColumn({name: 'parent_id'})
     parent: Division;
 }

@@ -87,7 +87,7 @@ content-type: application/json
 
 ###
 
-GET http://localhost:3000/divisions HTTP/1.1
+GET http://localhost:3000/divisions/10 HTTP/1.1
 content-type: application/json
 
 ###
