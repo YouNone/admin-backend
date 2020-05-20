@@ -1,3 +1,5 @@
+import { AuthService } from './auth/auth.service';
+import { AuthModule } from './auth/auth.module';
 import { ScaleService } from './scale/scale.service';
 import { ScaleController } from './scale/scale.controller';
 import { Scale } from './scale/scale.entity';
@@ -29,7 +31,8 @@ import { Task } from './task/task.entity';
       Division,
       Task,
       Scale
-    ])
+    ]),
+    AuthModule
   ],
   controllers: [
     DivisionController,

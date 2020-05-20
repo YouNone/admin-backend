@@ -23,6 +23,9 @@ export class User implements IUser {
 
     @Column()
     password: string;
+
+    @Column({nullable: true})
+    code: string
     
     @Column({nullable: true})
     group_id: number

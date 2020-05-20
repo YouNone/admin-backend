@@ -1,3 +1,12 @@
+###
+POST http://localhost:3000/users/login HTTP/1.1
+content-type: application/json
+
+{ 
+    "login": "login1",
+    "password": "1111"
+}
+###
 
 ###
 GET http://localhost:3000/users?start=0&limit=10&sort=desc&search=ALEX&sort=name HTTP/1.1
@@ -13,10 +22,10 @@ content-type: application/json
 
 { 
     "group_id": 2,
-    "name": "Username for user",
+    "name": "username",
     "password": "4314333213332423",
-    "login": "loginion",
-    "email": "useritto@gmail.com",
+    "login": "login1",
+    "email": "usero@gmail.com",
     "sex": "2",
     "date_birth": "2000-08-01 00:00:00.000",
     "date_hire": "2018-08-01 00:00:00.000"
@@ -33,7 +42,7 @@ content-type: application/json
     "email": "alex@gmail.com",
     "name": "ALEX",
     "sex": "1",
-    "password": "1111111",
+    "password": "1111",
     "date_birth": "1988-07-31T20:00:00.000Z",
     "date_create": "2020-04-21T16:27:32.936Z",
     "date_modify": "2020-04-21T16:27:32.936Z",
@@ -42,9 +51,8 @@ content-type: application/json
 }
 
 ###
-GET http://localhost:3000/groups?start=0&limit=10&sort=desc&search=273193weqw342&sort=code HTTP/1.1
 
-###
+GET http://localhost:3000/users HTTP/1.1
 
 ###
 GET http://localhost:3000/groups HTTP/1.1

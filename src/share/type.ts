@@ -28,12 +28,17 @@ export enum ESort {
 	desc = "DESC"
 }
 
-
+export interface IUserAuth {
+    login: string,
+	password: string,
+	token?: string
+}
 export interface IUser {
 	id?: number;
 	login: string;
 	email: string;
 	name: string;
+	code?: string;
 	sex: ESex;
 	password: string;
 	group_id: number
@@ -153,6 +158,26 @@ export interface IUniversalTreeNode {
 	/** ID родителя записи. Если элемент является корнем дерева, это поле равно NULL или не определено */
 	parent_id?: number;	
 }
+
+export interface ISearchOptions {
+	/** Индекс первой строки в результатах выборки */
+	start: number;
+	/** Количество элементов в результате запроса */
+	limit: number;
+	/** Имя поля, по которому производится сортировка выборки */
+	sort?: string;
+	/** Порядок сортировки ASC/DESC */
+	order?: 'ASC' | 'DESC';
+	/** Строка по которой производится поиск по полю field */
+	f?: string;
+	/** Поле в таблице данных, по которому производится поиск */
+	field?: string;
+	/** Вторая строка поиска по которой производится фильтрация данных */
+	f2?: string;
+	/** Второе поле по которому производтся фильтрация данных */
+	field2?: string;
+}
+
 
 export const alowedFields = ['name', 'login', 'email', 'code', 'type_start', 'date_execute', 'type_start'];
 

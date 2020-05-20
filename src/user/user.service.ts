@@ -1,3 +1,5 @@
+import { IUserAuth } from './../share/type';
+import { SearchOptions } from './../share/class/searchOptions';
 import { DeleteExeption } from './../share/errorhandlers/deleteExeption';
 import { ParseQuery } from './../share/parse.query';
 import { UpdateUserDto } from './dto/update-user.dto';
@@ -14,22 +16,35 @@ export class UserService {
     ) { }
 
     async getUsersList(incomeQuery: ParseQuery): Promise<User[]> {
-        const searchOpt = new ParseQuery(incomeQuery, Object.keys(new User()));
-        console.log(incomeQuery);
-        const query = this.repo
-            .createQueryBuilder('usr')
-            .skip(searchOpt.start)
-            .take(searchOpt.limit)
-            .where(
-                `usr.name LIKE :name 
-                 OR usr.login LIKE :name
-                 OR usr.email LIKE :name
-                `,
-                { name: `%${searchOpt.search}%` })
-            .orderBy({ [searchOpt.sort]: searchOpt.order })
-            .getMany();
-        return await query;
+        const searchOptios = new SearchOptions(incomeQuery, Object.keys(new User())); 
+		const qCondition = searchOptios.getQueryBuilderSearchStr('f', 'name', 'login');
+		const list = await this.repo.createQueryBuilder()
+			.where(qCondition, {f: `%${searchOptios.f}%`})
+			.orderBy({[searchOptios.sort]: searchOptios.order})
+			.skip(searchOptios.start)
+			.take(searchOptios.limit)
+			.getMany();
+		
+		return await list;
+
     }
+
+    // async getUserByLogin(authInfo : IUserAuth): Promise<User> {
+    //     const login = authInfo.login;
+    //     const password = authInfo.password;
+
+    //     const query = this.repo
+    //     .createQueryBuilder()
+    //     .where(`[user].[login] = :login`, {login})
+    //     .andWhere(`[user].[password] = :password`, {password})
+    //     .getOne();
+
+    //     // const query = this.repo.query(`
+    //     // SELECT * FROM [nest_admin].[dbo].[user]
+    //     // WHERE [login] = ${authInfo.login} AND WHERE password = ${authInfo.password} 
+    //     // `);
+    //     return await query;
+    // }
 
     async getUserById(id: number): Promise<User> {
         const found = this.repo.findOne(id);
