@@ -33,12 +33,4 @@ export class AuthService {
             return await { query, token };
         }
     }
-
-    // async login(user: IUserAuth) {
-    //     // const payload = { login: user.login, password: user.password };
-    //     return {
-    //         access_token: this.jwtService.sign(user)
-    //     };
-    // }
-
 }
